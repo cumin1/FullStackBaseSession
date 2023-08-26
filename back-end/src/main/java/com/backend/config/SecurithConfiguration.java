@@ -2,14 +2,12 @@ package com.backend.config;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONWriter;
 import com.backend.entity.RestBean;
 import com.backend.service.AuthorizeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -46,6 +41,7 @@ public class SecurithConfiguration {
                                            PersistentTokenRepository persistentTokenRepository) throws Exception {
         return http
                 .authorizeHttpRequests()
+                .requestMatchers("/api/user/**").permitAll() // 放行该请求路径下的所有请求
                 .anyRequest().authenticated() //所有界面都需要登录验证后才能访问
                 .and()
                 .formLogin() //使用表单登录

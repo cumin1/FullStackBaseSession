@@ -3,6 +3,8 @@ import {Back, Promotion, Search, Unlock, User} from "@element-plus/icons-vue";
 import router from "@/router";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import {post} from "@/net";
+
 
 const form = reactive({
   username: '',
@@ -75,6 +77,13 @@ const register = ()=>{
     }
   })
 }
+
+// 获取验证码
+const getEmailCode = ()=>{
+  post('/api/user/email',{email:form.email},(message)=>{
+    ElMessage.success(message)
+  })
+}
 </script>
 
 <template>
@@ -140,7 +149,7 @@ const register = ()=>{
               type="email"
               placeholder="请输入验证码"
           ></el-input>
-          <el-button style="margin-left: 10px;width: 20%;height: 40px;background-color: rgba(255, 255, 255, .2);
+          <el-button @click="getEmailCode" style="margin-left: 10px;width: 20%;height: 40px;background-color: rgba(255, 255, 255, .2);
   backdrop-filter: blur(10px);" :disabled="!isEmailValid">获取验证码
           </el-button>
         </el-form-item>
@@ -170,5 +179,9 @@ const register = ()=>{
   backdrop-filter: blur(10px);
   box-shadow: 0 0 10px #333;
 
+}
+
+/deep/ .el-form-item__error{
+  margin-left: 35px;
 }
 </style>
