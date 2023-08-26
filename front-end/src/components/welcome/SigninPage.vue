@@ -68,7 +68,7 @@ const toLogin = () => {
             class="w-50 m-2"
             size="large"
             type="email"
-            placeholder="请输入电子邮件验证码"
+            placeholder="请输入验证码"
         ></el-input>
         <el-button style="width: 20%;height: 40px;background-color: rgba(255, 255, 255, .2);
   backdrop-filter: blur(10px);">获取验证码</el-button>
