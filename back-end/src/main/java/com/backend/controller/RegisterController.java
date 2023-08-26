@@ -29,7 +29,8 @@ public class RegisterController {
     //获取验证码
     @PostMapping("/email")
     public RestBean<String> email(@Pattern(regexp = EMAIL_REGEX)
-                                      @RequestParam("email") String email){
+                                      @RequestParam("email") String email,
+                                  HttpSession session){
 //        Random random = new Random();
 //        int code = random.nextInt(900000) + 100000;   // 生成验证码
 //        session.setAttribute("code",code);    // 将验证码存入session
@@ -40,7 +41,7 @@ public class RegisterController {
 //        message.setTo(email);  // 设置目标邮件地址
 //        message.setFrom("fuhao6363@163.com");  //设置邮件发送地址
 //        MailSender.send(message);
-        if (authorizeService.sendVaildEmail(email)) {
+        if (authorizeService.sendVaildEmail(email,session.getId())) {
             return RestBean.success("邮件已发送，请注意查收");
         }else {
             return RestBean.failure(400,"邮件发送失败，请联系管理员");

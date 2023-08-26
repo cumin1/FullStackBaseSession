@@ -11,3 +11,11 @@ spring:
     password: FKHKTLUOWUULQKHO
     properties:
       from: fuhao6363@163.com
+
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+
+
