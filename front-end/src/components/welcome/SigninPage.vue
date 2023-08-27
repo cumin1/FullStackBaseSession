@@ -30,7 +30,7 @@ const passwordvalidate = (rule, value, callback) => {
   } else if (value !== form.password) {
     callback(new Error('输入密码不一致'))
   } else {
-
+    callback()
   }
 }
 
@@ -70,8 +70,17 @@ const onValidate = (prop,isValid,_)=>{
 
 const register = ()=>{
   formRef.value.validate((isValid)=>{
+    console.log(isValid)
     if(isValid){
-
+      post("/api/user/register",{
+            username:form.username,
+            password:form.password,
+            email:form.email,
+            code:form.emailverify
+      },(message)=>{
+        ElMessage.success(message)
+        router.push({path:'/'})
+          })
     }else {
       ElMessage.warning("请完整填写上述注册表单内容")
     }
@@ -100,6 +109,7 @@ const getEmailCode = ()=>{
       <el-form :model="form" :rules="rules" @validate="onValidate" ref="formRef">
         <el-form-item prop="username">
           <el-input
+              :maxlength="8"
               v-model="form.username"
               :prefix-icon="User"
               style="margin-left: 35px;height:50px;width: 80%;background: blue;opacity: 0.6;border-radius:4px"
@@ -110,6 +120,7 @@ const getEmailCode = ()=>{
         </el-form-item>
         <el-form-item prop="password">
           <el-input
+              :maxlength="16"
               v-model="form.password"
               :prefix-icon="Unlock"
               style="margin-left: 35px;height:50px;width: 80%;background: blue;opacity: 0.6;border-radius:4px"
@@ -141,6 +152,7 @@ const getEmailCode = ()=>{
         </el-form-item>
         <el-form-item prop="emailverify">
           <el-input
+              :maxlength="6"
               v-model="form.emailverify"
               :prefix-icon="Unlock"
               style="margin-left: 35px;height:50px;width: 60%;background: blue;opacity: 0.6;border-radius:4px"
@@ -156,8 +168,8 @@ const getEmailCode = ()=>{
       </el-form>
     </div>
 
-    <div style="width: 100%;display: flex;margin-top: 30px">
-      <el-button @click="register" style="width: 80%;height:50px;margin: 0 auto;opacity: 0.6;display: block" type="success" plain>注册
+    <div style="width: 100%;margin-top: 30px">
+      <el-button  @click="register" style="width: 80%;height:50px;margin: 0 auto;opacity: 0.6;display: block" type="success" plain>注册
       </el-button>
     </div>
 

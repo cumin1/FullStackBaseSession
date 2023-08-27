@@ -6,6 +6,7 @@ import com.backend.service.AuthorizeService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +20,7 @@ import java.util.Random;
 @RequestMapping("/api/user")
 public class RegisterController {
     private final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-z]{2,}$";
+    private final String USERNAME_REGEX = "^[a-zA-Z0-9\u4e00-\u9fa5]+$";
 
     //JavaMailSender是专门用于发送邮件的对象，自动配置类已经提供了Bean
     @Autowired
@@ -29,22 +31,14 @@ public class RegisterController {
     //获取验证码
     @PostMapping("/email")
     public RestBean<String> email(@Pattern(regexp = EMAIL_REGEX)
-                                      @RequestParam("email") String email,
-                                  HttpSession session){
-//        Random random = new Random();
-//        int code = random.nextInt(900000) + 100000;   // 生成验证码
-//        session.setAttribute("code",code);    // 将验证码存入session
-//        session.setAttribute("email",email);  // 将邮箱地址存入session
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setSubject("该文件为验证码发送测试");
-//        message.setText("验证码为："+ code);
-//        message.setTo(email);  // 设置目标邮件地址
-//        message.setFrom("fuhao6363@163.com");  //设置邮件发送地址
-//        MailSender.send(message);
-        if (authorizeService.sendVaildEmail(email,session.getId())) {
+                                  @RequestParam("email") String email,
+                                  HttpSession session) {
+        String s = authorizeService.sendVaildEmail(email, session.getId());
+
+        if (s == null) {
             return RestBean.success("邮件已发送，请注意查收");
-        }else {
-            return RestBean.failure(400,"邮件发送失败，请联系管理员");
+        } else {
+            return RestBean.failure(400, s);
         }
 
 
@@ -53,12 +47,19 @@ public class RegisterController {
 
     // 注册
     @PostMapping("/register")
-    public RestBean register(@RequestBody Account account,HttpSession session){
-        String sessionCode = session.getAttribute("code").toString();
-        String sessionEmail = session.getAttribute("email").toString();
-        String email = account.getEmail();
+    public RestBean<String> register(@Pattern(regexp = USERNAME_REGEX) @Length(min=2,max=8) @RequestParam("username") String username,
+                                     @Length(min=6,max=16) @RequestParam("password") String password,
+                                     @Pattern(regexp = EMAIL_REGEX) @RequestParam("email") String email,
+                                     @Length(min = 6,max = 6) @RequestParam("code") String code,
+                                     HttpSession session) {
+
+        String s = authorizeService.validateAndRegister(username,password,email,code,session.getId());
+        if (s == null) {
+            return RestBean.success("注册成功");
+        }else {
+            return RestBean.failure(400,s);
+        }
 
 
-        return RestBean.success();
     }
 }
