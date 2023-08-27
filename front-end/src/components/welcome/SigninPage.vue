@@ -62,6 +62,8 @@ const rules = {
 
 const formRef = ref()
 const isEmailValid = ref(false)
+const isSendEmail = ref(false)
+const coldTime = ref(0)
 const onValidate = (prop,isValid,_)=>{
   if(prop === 'email'){
     isEmailValid.value = isValid
@@ -91,7 +93,10 @@ const register = ()=>{
 const getEmailCode = ()=>{
   post('/api/user/email',{email:form.email},(message)=>{
     ElMessage.success(message)
+    coldTime.value = 60
+    setInterval(()=>coldTime.value-- , 1000)
   })
+
 }
 </script>
 
@@ -162,7 +167,8 @@ const getEmailCode = ()=>{
               placeholder="请输入验证码"
           ></el-input>
           <el-button @click="getEmailCode" style="margin-left: 10px;width: 20%;height: 40px;background-color: rgba(255, 255, 255, .2);
-  backdrop-filter: blur(10px);" :disabled="!isEmailValid">获取验证码
+  backdrop-filter: blur(10px);" :disabled="!isEmailValid || coldTime > 0">
+            {{ coldTime> 0 ? "请稍后"+coldTime+"秒" :  "获取验证码"}}
           </el-button>
         </el-form-item>
       </el-form>

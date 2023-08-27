@@ -43,6 +43,7 @@ const login = ()=>{
           placeholder="请输入用户名/邮箱"
       ></el-input>
       <el-input
+          type="password"
           :prefix-icon="Lock"
           v-model="form.password"
           style="margin: 10px 15px;height:50px;width: 80%;background: blue;opacity: 0.6;border-radius:4px"
