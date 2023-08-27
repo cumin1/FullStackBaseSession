@@ -1,19 +1,14 @@
 package com.backend.controller;
 
-import com.backend.entity.Account;
 import com.backend.entity.RestBean;
 import com.backend.service.AuthorizeService;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Random;
 
 @Validated
 @RestController
@@ -40,10 +35,7 @@ public class RegisterController {
         } else {
             return RestBean.failure(400, s);
         }
-
-
     }
-
 
     // 注册
     @PostMapping("/register")

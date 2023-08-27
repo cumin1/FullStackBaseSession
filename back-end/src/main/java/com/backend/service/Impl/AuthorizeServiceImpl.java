@@ -1,10 +1,9 @@
 package com.backend.service.Impl;
 
-import com.backend.entity.Account;
+import com.backend.entity.auth.Account;
 import com.backend.mapper.UserMapper;
 import com.backend.service.AuthorizeService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.net.http.HttpClient;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
