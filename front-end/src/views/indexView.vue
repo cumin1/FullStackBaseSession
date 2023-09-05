@@ -2,6 +2,7 @@
 import router from "@/router";
 import {get} from "@/net/index"
 import {ElMessage} from "element-plus";
+import Kuangjia from "@/components/index/kuangjia.vue";
 
 const logout = () => {
   get("/api/user/logout",(message)=>{
@@ -14,7 +15,7 @@ const logout = () => {
 
 <template>
   <div>
-    欢迎进入到我的网站
+    <kuangjia></kuangjia>
     <el-button @click="logout" type="danger">退出登录</el-button>
   </div>
 </template>
